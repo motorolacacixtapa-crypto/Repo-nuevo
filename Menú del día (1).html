@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Menú del día</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:ital,wght@1,600;1,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF3DC;--card:#fff;--ink:#2B1308;--mute:#7A5A45;--line:#F6D79A;--acc:#D9300F;--accink:#fff;--ok:#15803D;--sun:#FFB81C;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2A1109;--card:#3A1A0E;--ink:#FFF1DC;--mute:#D9AE8C;--line:#5A2E1A;--acc:#FF6B3D;--accink:#2A0F05;--ok:#3DD070;--sun:#FFC83D}}
+:root[data-theme="dark"]{--bg:#2A1109;--card:#3A1A0E;--ink:#FFF1DC;--mute:#D9AE8C;--line:#5A2E1A;--acc:#FF6B3D;--accink:#2A0F05;--ok:#3DD070;--sun:#FFC83D}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:150px}
+.wrap{max-width:560px;margin:0 auto;padding:0 18px}
+header{background:linear-gradient(135deg,#B91C1C,#D9480F);color:#fff;margin:0 -18px;padding:28px 18px 22px;border-radius:0 0 28px 28px}
+header .fecha{color:#FFE9D2}
+h1{font-size:clamp(34px,10vw,48px);line-height:1;font-weight:800;margin:0 0 8px;letter-spacing:-.02em}
+.fecha{color:var(--mute);margin:0}
+.hor{font-weight:600;margin:10px 0 0}
+.estado{display:inline-block;margin:8px 0 0;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:14px;font-weight:600}
+.estado.on{color:var(--ok);border-color:var(--ok)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);display:flex;gap:8px;padding:10px 0;z-index:5;overflow-x:auto}
+nav button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer}
+nav button[aria-pressed="true"]{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+h2{font-size:22px;margin:22px 0 4px}
+.item{border-left:6px solid var(--sun);display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px}
+.item.off{opacity:.5}
+.t{font-weight:600}.d{color:var(--mute);font-size:14px}.p{font-weight:800;color:var(--acc);margin-top:2px}
+.step{display:flex;align-items:center;gap:10px;flex:none}
+.step button,.add{border:0;background:var(--acc);color:var(--accink);font:inherit;font-weight:800;border-radius:999px;cursor:pointer}
+.step button{width:34px;height:34px;font-size:20px;line-height:1}
+.add{padding:9px 16px}
+.n{min-width:18px;text-align:center;font-weight:800}
+.agot{color:var(--mute);font-size:14px;font-weight:600}
+.datos{margin-top:26px}
+.datos label{display:block;font-weight:600;margin:12px 0 4px}
+.datos input,.datos textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.tot{font-weight:800;font-size:20px}.tot small{display:block;font-weight:400;color:var(--mute);font-size:13px}
+.wa{background:var(--ok);color:var(--accink);text-decoration:none;font-weight:800;padding:13px 20px;border-radius:14px}
+.wa[aria-disabled="true"]{opacity:.4;pointer-events:none}
+.lnk{border:0;background:none;color:var(--mute);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;margin-top:28px;padding:6px 0}
+.adm{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:8px}
+.adm h2{margin:0 0 6px}.adm label{display:block;font-weight:600;margin:10px 0 4px}
+.adm input:not([type=checkbox]),.adm select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px}
+.ar{border-top:1px solid var(--line);padding:12px 0;display:grid;gap:8px}
+.r2{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
+.chk{display:flex!important;gap:8px;align-items:center;font-weight:400!important}
+.adm button{font:inherit;font-weight:700;border-radius:12px;padding:10px 16px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-top:8px}
+.adm .del{justify-self:start;color:var(--acc)}
+.adm .wa2{background:var(--acc);color:var(--accink);border-color:var(--acc);width:100%}
+.resumen{background:var(--card);border:2px dashed var(--sun);border-radius:16px;padding:14px;margin-top:26px}
+.resumen h2{margin:0 0 6px}
+.ln{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+.vacio{color:var(--mute)}
+.suma{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;font-size:22px;font-weight:800}
+.suma strong{color:var(--acc);font-size:26px}
+h1,h2,.p,.suma strong,.tot span{font-family:"Fraunces",Georgia,"Times New Roman",serif;font-style:italic}
+h2{font-weight:600}
+.d,.fecha,.hor,.vacio{font-style:italic}
+.t{font-weight:700}
+header{position:relative;overflow:hidden;padding-right:118px}
+.hero{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:92px;height:92px;border-radius:50%;background:#FFE0A3;display:grid;place-items:center}
+.hero svg{width:62px;height:62px}
+.th{flex:none;width:56px;height:56px;border-radius:14px;background:#FFE0A3;display:grid;place-items:center}
+.tx{flex:1;min-width:0}
+#menu{scroll-margin-top:70px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="hero" aria-hidden="true"><svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M8 24h32a16 16 0 0 1-32 0z" fill="#D9300F"/><path d="M12 24c2-5 8-7 12-7s10 2 12 7z" fill="#FFB81C"/><circle cx="19" cy="21" r="2" fill="#15803D"/><circle cx="27" cy="20" r="2" fill="#15803D"/><circle cx="32" cy="22" r="1.6" fill="#7A2E10"/><path d="M18 12c-2-2 2-3 0-6M26 12c-2-2 2-3 0-6M34 12c-2-2 2-3 0-6" stroke="#B45309" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="17" y="41" width="14" height="3" rx="1.5" fill="#7A2E10"/></svg></div>
+<h1 id="neg"></h1>
+<p class="fecha" id="fecha"></p>
+<p class="hor">Abierto viernes, sábado y domingo, de 10 am a 3 pm</p>
+<p class="estado" id="estado"></p>
+</header>
+<nav id="tabs" aria-label="Categorías"></nav>
+<main id="menu"></main>
+<section class="resumen" aria-live="polite"><h2>Tu pedido</h2><div id="lineas"></div><div class="suma"><span>Total a pagar</span><strong id="sumaT">$0</strong></div></section>
+<section class="datos">
+<label for="nom">Tu nombre</label>
+<input id="nom" autocomplete="name" placeholder="Ej. Ana">
+<label for="nota">Notas del pedido</label>
+<textarea id="nota" rows="2" placeholder="Sin cebolla, entrega a las 2 pm…"></textarea>
+</section>
+</div>
+<div class="wrap"><button type="button" id="admbtn" class="lnk">Administrador</button><div id="adm" class="adm" hidden></div></div>
+<script type="application/json" id="datos">{"menu":[{"cat":"Comidas","nombre":"Picadillo de res","desc":"","precio":90}]}</script>
+<div class="bar"><div class="in">
+<div class="tot"><span id="tot">$0</span><small id="cnt">Sin productos</small></div>
+<a class="wa" id="wa" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir por WhatsApp</a>
+</div></div>
+
+<script>
+const SRC="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+/* ===== EDITA SOLO ESTA SECCIÓN CADA DÍA ===== */
+const CONFIG={
+  negocio:"La cocina de Nani",
+  whatsapp:"527551016464", // número con código de país, sin + ni espacios
+  moneda:"$"
+};
+const MENU=JSON.parse(document.getElementById("datos").textContent).menu;
+/* ============================================ */
+
+const q=id=>document.getElementById(id);
+const qty={};
+let activa="Todo";
+const cats=["Todo",...new Set(MENU.map(m=>m.cat))];
+q("neg").textContent=CONFIG.negocio;
+const DIAS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"],ABRE=[5,6,0];
+(function(){
+  const d=new Date(),dia=d.getDay(),h=d.getHours()+d.getMinutes()/60,esDia=ABRE.includes(dia),e=q("estado");
+  q("fecha").textContent=esDia?"Menú de hoy, "+d.toLocaleDateString("es",{weekday:"long",day:"numeric",month:"long"}):"Menú del próximo servicio";
+  if(esDia&&h>=10&&h<15){e.textContent="Abierto ahora, hasta las 3 pm";e.className="estado on"}
+  else if(esDia&&h<10){e.textContent="Abrimos hoy a las 10 am"}
+  else{let k=1;while(!ABRE.includes((dia+k)%7))k++;e.textContent="Cerrado ahora. Abrimos "+(k===1?"mañana":"el "+DIAS[(dia+k)%7])+" a las 10 am"}
+})();
+document.title=CONFIG.negocio+" · Menú del día";
+const money=n=>CONFIG.moneda+n.toLocaleString("es");
+
+function tabs(){
+  q("tabs").innerHTML="";
+  cats.forEach(c=>{
+    const b=document.createElement("button");
+    b.textContent=c;b.setAttribute("aria-pressed",c===activa);
+    b.onclick=()=>{activa=c;tabs();lista()};
+    q("tabs").appendChild(b);
+  });
+}
+const ICON={Comidas:'<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M8 24h32a16 16 0 0 1-32 0z" fill="#D9300F"/><path d="M12 24c2-5 8-7 12-7s10 2 12 7z" fill="#FFB81C"/><circle cx="19" cy="21" r="2" fill="#15803D"/><circle cx="27" cy="20" r="2" fill="#15803D"/><circle cx="32" cy="22" r="1.6" fill="#7A2E10"/><path d="M18 12c-2-2 2-3 0-6M26 12c-2-2 2-3 0-6M34 12c-2-2 2-3 0-6" stroke="#B45309" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="17" y="41" width="14" height="3" rx="1.5" fill="#7A2E10"/></svg>',Postres:'<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M12 26h24l-3 16H15z" fill="#B45309"/><path d="M10 26c0-7 6-12 14-12s14 5 14 12z" fill="#F472B6"/><circle cx="24" cy="12" r="4" fill="#D9300F"/><path d="M24 8c1-3 3-4 5-4" stroke="#15803D" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',Bebidas:'<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M12 14h24l-3 28H15z" fill="#FF8A00"/><rect x="18" y="22" width="8" height="8" rx="2" fill="#FFF1DC" opacity=".85"/><rect x="26" y="28" width="7" height="7" rx="2" fill="#FFF1DC" opacity=".85"/><path d="M28 14l6-10" stroke="#D9300F" stroke-width="3" stroke-linecap="round"/><circle cx="36" cy="16" r="6" fill="#FFD84D"/><circle cx="36" cy="16" r="3" fill="#FFF3B0"/></svg>'};
+function lista(){
+  const m=q("menu");m.innerHTML="";
+  cats.slice(1).filter(c=>activa==="Todo"||activa===c).forEach(c=>{
+    const h=document.createElement("h2");h.textContent=c;m.appendChild(h);
+    MENU.forEach((it,i)=>{
+      if(it.cat!==c)return;
+      const d=document.createElement("div");d.className="item"+(it.agotado?" off":"");
+      const n=qty[i]||0;
+      let ctl;
+      if(it.agotado)ctl='<span class="agot">Agotado</span>';
+      else if(!n)ctl=`<button class="add" data-i="${i}" data-d="1">Agregar</button>`;
+      else ctl=`<div class="step"><button data-i="${i}" data-d="-1" aria-label="Quitar uno">−</button><span class="n">${n}</span><button data-i="${i}" data-d="1" aria-label="Agregar uno">+</button></div>`;
+      d.innerHTML=`<div class="th">${ICON[it.cat]||ICON.Comidas}</div><div class="tx"><div class="t">${it.nombre}</div><div class="d">${it.desc||""}</div><div class="p">${money(it.precio)}</div></div>${ctl}`;
+      m.appendChild(d);
+    });
+  });
+}
+q("menu").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-i]");if(!b)return;
+  const i=+b.dataset.i;qty[i]=Math.max(0,(qty[i]||0)+ +b.dataset.d);
+  lista();resumen();
+});
+function resumen(){
+  let t=0,c=0;MENU.forEach((it,i)=>{const n=qty[i]||0;t+=n*it.precio;c+=n});
+  q("tot").textContent=money(t);
+  q("sumaT").textContent=money(t);
+  q("lineas").innerHTML=c?MENU.map((it,i)=>qty[i]?`<div class="ln"><span>${qty[i]} × ${esc(it.nombre)}</span><span>${money(qty[i]*it.precio)}</span></div>`:"").join(""):'<div class="vacio">Aún no agregas productos.</div>';
+  q("cnt").textContent=c?c+(c===1?" producto":" productos"):"Sin productos";
+  const a=q("wa");a.setAttribute("aria-disabled",c?"false":"true");
+  let msg=`Hola, quiero hacer un pedido en ${CONFIG.negocio}:\n\n`;
+  MENU.forEach((it,i)=>{if(qty[i])msg+=`• ${qty[i]} x ${it.nombre} (${money(qty[i]*it.precio)})\n`});
+  msg+=`\nTotal: ${money(t)}`;
+  if(q("nom").value.trim())msg+=`\nNombre: ${q("nom").value.trim()}`;
+  if(q("nota").value.trim())msg+=`\nNotas: ${q("nota").value.trim()}`;
+  a.href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg);
+}
+q("nom").oninput=q("nota").oninput=resumen;
+const HASH="ad06617e332a3ef98b40c70cc3430f4e7290a8c07ab2e203029fbb7029178d43";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+const A=q("adm");let M=[];
+q("admbtn").onclick=()=>{
+  if(!A.hidden){A.hidden=true;return}
+  A.hidden=false;
+  A.innerHTML='<h2>Administrador</h2><label for="pw">Contraseña</label><input id="pw" type="password" autocomplete="current-password"><button type="button" id="entrar" class="wa2">Entrar</button><p id="msg" role="status"></p>';
+  q("pw").onkeydown=e=>{if(e.key==="Enter")q("entrar").click()};
+  q("pw").focus();
+};
+function editor(){
+  A.innerHTML='<h2>Menú del día</h2>'+M.map((it,i)=>`<div class="ar" data-i="${i}"><input data-f="nombre" value="${esc(it.nombre)}" placeholder="Platillo" aria-label="Platillo"><input data-f="desc" value="${esc(it.desc||"")}" placeholder="Descripción (opcional)" aria-label="Descripción"><div class="r2"><input data-f="precio" type="number" inputmode="decimal" value="${it.precio}" aria-label="Precio"><select data-f="cat" aria-label="Categoría">${["Comidas","Postres","Bebidas"].map(c=>`<option${c===it.cat?" selected":""}>${c}</option>`).join("")}</select></div><label class="chk"><input type="checkbox" data-f="agotado"${it.agotado?" checked":""}> Agotado</label><button type="button" class="del" data-del="${i}">Quitar</button></div>`).join("")+'<button type="button" id="nuevo">Agregar platillo</button><button type="button" id="guardar" class="wa2">Guardar y publicar</button><p id="msg" role="status"></p>';
+}
+A.addEventListener("input",e=>{
+  const r=e.target.closest(".ar");if(!r)return;
+  const f=e.target.dataset.f,it=M[+r.dataset.i];
+  it[f]=f==="agotado"?e.target.checked:f==="precio"?+e.target.value:e.target.value;
+});
+A.addEventListener("click",async e=>{
+  const id=e.target.id,del=e.target.dataset.del;
+  if(id==="entrar"){
+    let ok=false;try{ok=(await sha(q("pw").value))===HASH}catch(x){}
+    if(ok){M=JSON.parse(JSON.stringify(MENU));editor()}else q("msg").textContent="Contraseña incorrecta";
+  }else if(id==="nuevo"){M.push({cat:"Comidas",nombre:"",desc:"",precio:0});editor()}
+  else if(del!==undefined){M.splice(+del,1);editor()}
+  else if(id==="guardar")guardar();
+});
+async function guardar(){
+  const msg=q("msg");msg.textContent="Guardando…";
+  const menu=M.filter(x=>x.nombre.trim()).map(x=>{const o={cat:x.cat,nombre:x.nombre.trim(),desc:(x.desc||"").trim(),precio:+x.precio||0};if(x.agotado)o.agotado=true;return o});
+  const json=JSON.stringify({menu}).replace(/</g,"\\u003c");
+  const html=SRC.replace(/(<script type="application\/json" id="datos">)[\s\S]*?(<\/script>)/,(a,b,c)=>b+json+c);
+  try{
+    const art=await claude.use("artifact");
+    if(!art){msg.textContent="Para guardar, abre este link con la cuenta de Claude del dueño.";return}
+    await art.publish(html);
+    msg.textContent="Publicado";
+  }catch(err){
+    msg.textContent=err&&(err.code==="not_writer"||err.code==="not_granted")?"Esta cuenta no puede publicar cambios. Abre el link con la cuenta de Claude del dueño.":"No se pudo guardar. Intenta de nuevo.";
+  }
+}
+tabs();lista();resumen();
+if(location.hash==="#pedido")setTimeout(()=>q("menu").scrollIntoView(),150);
+</script>
+</body>
+</html>
